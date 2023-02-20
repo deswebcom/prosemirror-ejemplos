@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicializar un documento Prosemirror</title>
+  <style>
+    #editor {
+      border: 1px solid blue;
+    }
+    #content {
+      display: none;
+    }
+
+    .ProseMirror {
+      position: relative;
+      word-wrap: break-word;
+      white-space: pre-wrap;
+      white-space: break-spaces;
+      -webkit-font-variant-ligatures: none;
+      font-variant-ligatures: none;
+      font-feature-settings: "liga" 0;
+      /* the above doesn't seem to work in Edge */
+    }
+
+    .ProseMirror p:first-child,
+    .ProseMirror h1:first-child,
+    .ProseMirror h2:first-child,
+    .ProseMirror h3:first-child,
+    .ProseMirror h4:first-child,
+    .ProseMirror h5:first-child,
+    .ProseMirror h6:first-child {
+      margin-top: 10px;
+    }
+
+    .ProseMirror {
+      padding: 4px 8px 4px 14px;
+      line-height: 1.2;
+      outline: none;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Inicializar un documento Prosemirror</h1>
+
+  <div id="editor"></div>
+  <div id="content">
+    <h1>Bienvenidos a ProseMirror</h1>
+    <p>Este es el contenido de este documento. Hay un elemento de la página que contiene este marcado.</p>
+    <p>Luego el elemento lo usaremos para inicializar el editor.</p>
+    <ul>
+      <li>Este elemento estará oculto</li>
+      <li>Para que no aparezca en la página</li>
+      <li>Solo aparecerá en el editor</li>
+    </ul>
+  </div>
+
+  <hr>
+  <a href="../index.html">Volver</a>
+
+  <script type="module">
+    import { schema } from "prosemirror-schema-basic";
+    import { EditorState } from "prosemirror-state";
+    import { EditorView } from "prosemirror-view";
+    import { keymap } from "prosemirror-keymap";
+    import { DOMParser } from "prosemirror-model"
+    import {
+      baseKeymap,
+    } from "prosemirror-commands";
+
+    let content = document.getElementById('content');
+    let state = EditorState.create({
+      plugins: [
+        keymap(baseKeymap),
+      ],
+      doc: DOMParser.fromSchema(schema).parse(content)
+    });
+    let view = new EditorView(document.getElementById('editor'), {
+      state,
+    });
+  </script>
+</body>
+
+</html>
