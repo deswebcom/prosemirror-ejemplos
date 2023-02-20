@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hello World Prosemirror</title>
+  <style>
+      #editor {
+        border: 1px solid blue;
+      }
+      .ProseMirror {
+        position: relative;
+        word-wrap: break-word;
+        white-space: pre-wrap;
+        white-space: break-spaces;
+        -webkit-font-variant-ligatures: none;
+        font-variant-ligatures: none;
+        font-feature-settings: "liga" 0; /* the above doesn't seem to work in Edge */
+      }
+
+      .ProseMirror p:first-child,
+      .ProseMirror h1:first-child,
+      .ProseMirror h2:first-child,
+      .ProseMirror h3:first-child,
+      .ProseMirror h4:first-child,
+      .ProseMirror h5:first-child,
+      .ProseMirror h6:first-child {
+        margin-top: 10px;
+      }
+      .ProseMirror {
+        padding: 4px 8px 4px 14px;
+        line-height: 1.2;
+        outline: none;
+      }
+  </style>
+</head>
+<body>
+  <h1>Hello World con Prosemirror</h1>
+  
+  <div id="editor"></div>
+
+  <hr>
+  <a href="../index.html">Volver</a>
+
+  <script type="module">
+      import { schema } from "prosemirror-schema-basic";
+      import { EditorState } from "prosemirror-state";
+      import { EditorView } from "prosemirror-view";
+      import { undo, redo, history } from "prosemirror-history";
+      import { keymap } from "prosemirror-keymap";
+
+      let state = EditorState.create({ 
+        schema,
+        plugins: [
+          history(),
+          keymap({ "Mod-z": undo, "Mod-y": redo })
+        ],
+      });
+      let view = new EditorView(document.getElementById('editor'), {
+        state,
+        dispatchTransaction(transaction) {
+          console.log(
+            "El contenido del documento tenía", 
+            transaction.before.content.size,
+            "y ahora tiene",
+            transaction.doc.content.size);
+          let newState = view.state.apply(transaction)
+          view.updateState(newState)
+        },
+      });
+  </script>
+</body>
+</html>
