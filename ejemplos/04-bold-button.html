@@ -5,14 +5,10 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inicializar un documento Prosemirror</title>
+  <title>Crear un botón de bold en ProseMirror</title>
   <style>
     #editor {
       border: 1px solid blue;
-    }
-
-    #content {
-      display: none;
     }
 
     .ProseMirror {
@@ -45,7 +41,7 @@
 </head>
 
 <body>
-  <h1>Crear un menú en un editor Prosemirror</h1>
+  <h1>Crear un botón de bold en ProseMirror</h1>
 
   <div id="editor"></div>
 
@@ -63,20 +59,22 @@
       baseKeymap,
       toggleMark
     } from "prosemirror-commands";
-    //import { menu } from './menu/menu-plugin.js';
+
+    const boldCommand = toggleMark(schema.marks.strong);
 
     let state = EditorState.create({
       schema,
       plugins: [
         keymap(baseKeymap),
-        //menu
+        keymap({
+          "Mod-b": boldCommand, 
+        })
       ],
     });
     let view = new EditorView(document.getElementById('editor'), {
       state,
     });
 
-    let boldCommand = toggleMark(schema.marks.strong);
     document.getElementById('button-bold').addEventListener('click', function() {
       boldCommand(view.state, view.dispatch);
       view.focus();
