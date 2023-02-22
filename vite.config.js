@@ -13,6 +13,7 @@ export default defineConfig({
         commands: resolve(__dirname, 'ejemplos', '02-commandos-prosemirror.html'),
         initEditor: resolve(__dirname, 'ejemplos', '03-inicializacion-documento.html'),
         menu: resolve(__dirname, 'ejemplos', '04-bold-button.html'),
+        plugins: resolve(__dirname, 'ejemplos', '05-plugins.html'),
       },
     },
   },
