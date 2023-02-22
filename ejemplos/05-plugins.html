@@ -15,6 +15,7 @@
   <div id="editor"></div>
 
   <hr>
+
   <a href="../index.html">Volver</a>
 
   <script type="module">
@@ -28,31 +29,31 @@
     } from "prosemirror-commands";
 
     let showClickPosPlugin = new Plugin({
-        props: {
-          handleClick(view, pos) {
-            console.log('Se ha hecho click en la posición', pos);
-            return false;
-          }
+      props: {
+        handleClick(view, pos) {
+          console.log('Se ha hecho click en la posición', pos);
+          return false;
+        }
+      },
+    });
+    let countTransactions = new Plugin({
+      state: {
+        init() {
+          return 0;
         },
-      });
-      let countTransactions = new Plugin({
-        state: {
-          init() {
-            return 0;
-          },
-          apply(tr, value) {
-            console.log('Detectada transacción número', value + 1);
-            return value + 1;
-          }
-        } 
-      });
+        apply(tr, value) {
+          console.log('Detectada transacción número', value + 1);
+          return value + 1;
+        }
+      }
+    });
 
     let boldButtonPlugin = new Plugin({
       view(editorView) {
         const element = document.createElement('button');
         element.textContent = 'Bold';
         const boldCommand = toggleMark(schema.marks.strong);
-        element.addEventListener('click', function() {  
+        element.addEventListener('click', function () {
           boldCommand(editorView.state, editorView.dispatch);
           editorView.focus();
         })
@@ -64,7 +65,7 @@
         };
       }
     })
-        
+
     let state = EditorState.create({
       schema,
       plugins: [
