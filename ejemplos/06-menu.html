@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crear un menú para el editor ProseMirror</title>
+  <link rel="stylesheet" href="./css/editor-styles.css">
+</head>
+
+<body>
+  <h1>Crear un menú en un editor Prosemirror</h1>
+
+  <div id="editor"></div>
+
+  <hr>
+  <a href="../index.html">Volver</a>
+
+  <script type="module">
+    import { schema } from "prosemirror-schema-basic";
+    import { EditorState } from "prosemirror-state";
+    import { EditorView } from "prosemirror-view";
+    import { keymap } from "prosemirror-keymap";
+    import {
+      baseKeymap,
+    } from "prosemirror-commands";
+    import { menu } from './menu/menu-plugin.js';
+
+    let state = EditorState.create({
+      schema,
+      plugins: [
+        keymap(baseKeymap),
+        menu
+      ],
+    });
+    let view = new EditorView(document.getElementById('editor'), {
+      state,
+    });
+  </script>
+</body>
+
+</html>

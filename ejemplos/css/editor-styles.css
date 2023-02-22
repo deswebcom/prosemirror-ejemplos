@@ -31,3 +31,14 @@
   line-height: 1.2;
   outline: none;
 }
+.menubar {
+  border-bottom: 1px solid blue;
+  padding: 0 0.25rem;
+}
+.menubar .menuicon {
+  border-right: 1px solid blue;
+  display: inline-block;
+  padding: 0.2rem;
+  width: 1.5rem;
+  text-align: center;
+}
