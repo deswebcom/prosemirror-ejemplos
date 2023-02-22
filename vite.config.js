@@ -14,6 +14,9 @@ export default defineConfig({
         initEditor: resolve(__dirname, 'ejemplos', '03-inicializacion-documento.html'),
         menu: resolve(__dirname, 'ejemplos', '04-bold-button.html'),
         plugins: resolve(__dirname, 'ejemplos', '05-plugins.html'),
+        menu: resolve(__dirname, 'ejemplos', '06-menu.html'),
+        serializar: resolve(__dirname, 'ejemplos', '07-serializar-html.html'),
+        
       },
     },
   },
