@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Extender el schema para soportar listas</title>
+  <link rel="stylesheet" href="./css/editor-styles.css">
+</head>
+
+<body>
+  <h1>Extender el schema para soportar listas</h1>
+
+  <div id="editor"></div>
+  <div id="content">
+    <h1>Bienvenidos a ProseMirror</h1>
+    <p>Este es el <b>contenido de este documento</b>. Hay un elemento de la página que contiene este marcado.</p>
+    <p>Luego el elemento lo usaremos para inicializar el editor.</p>
+    <ul>
+      <li>Este elemento estará <i>oculto</i></li>
+      <li>Para que no aparezca en la página</li>
+      <li>Solo aparecerá en el editor</li>
+    </ul>
+  </div>
+
+  <hr>
+  <a href="../index.html">Volver</a>
+
+  <script type="module">
+    import { schema } from "prosemirror-schema-basic";
+    import { addListNodes } from "prosemirror-schema-list"
+    import { EditorState } from "prosemirror-state";
+    import { EditorView } from "prosemirror-view";
+    import { keymap } from "prosemirror-keymap";
+    import { Schema, DOMParser } from "prosemirror-model"
+    import {
+      baseKeymap,
+    } from "prosemirror-commands";
+
+    const schemaExtendido = new Schema({
+        nodes: addListNodes(schema.spec.nodes, "paragraph block*", "block"),
+        marks: schema.spec.marks
+    });
+
+    let content = document.getElementById('content');
+    let state = EditorState.create({
+      plugins: [
+        keymap(baseKeymap),
+      ],
+      doc: DOMParser.fromSchema(schemaExtendido).parse(content)
+    });
+    let view = new EditorView(document.getElementById('editor'), {
+      state,
+    });
+  </script>
+</body>
+
+</html>
