@@ -24,7 +24,11 @@
     <li><a href="./ejemplos/10-editor-markdown.html">Editor Markdown</a></li>
   </ul>
 
-  <dile-editor value="# Soy un editor!!"></dile-editor>
+  <dile-editor>
+# soy el slot
+
+Este componente se inicializa con el contenido del slot. Pero si tienes un atributo value, lo tomará con preferencia.
+  </dile-editor>
 
   <script src="./src/index.js" type="module"></script>
 </body>
