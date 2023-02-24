@@ -6,6 +6,8 @@ import {
 } from "prosemirror-markdown";
 import { EditorState, Plugin } from "prosemirror-state";
 import { EditorView } from "prosemirror-view";
+import { keymap } from "prosemirror-keymap";
+import { baseKeymap } from "prosemirror-commands";
 
 export class DileEditorMarkdown extends LitElement {
   
@@ -22,10 +24,7 @@ export class DileEditorMarkdown extends LitElement {
     const editorElement = this;
     const dispatchChange = this.dispatchChange.bind(this);
 
-    let state = EditorState.create({
-      schema,
-    });
-
+    const state = this.getState('');
     const view = new EditorView(editorElement, {
       state,
       dispatchTransaction(transaction) {
@@ -49,11 +48,17 @@ export class DileEditorMarkdown extends LitElement {
     return defaultMarkdownSerializer.serialize(this.view.state.doc);
   }
 
-  updateEditorContent(content) {
-    let newState = EditorState.create({
+  getState(content) {
+    return EditorState.create({
       doc: defaultMarkdownParser.parse(content),
+      plugins: [
+        keymap(baseKeymap),
+      ]
     })
-    this.view.updateState(newState);
+  }
+
+  updateEditorContent(content) {
+    this.view.updateState(this.getState(content));
   }
 
   dispatchChange(newState) {
