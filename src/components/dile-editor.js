@@ -1,7 +1,6 @@
 import { LitElement, html, css } from 'lit';
-import { schema } from "prosemirror-schema-basic"
-import { EditorState } from "prosemirror-state"
-import { EditorView } from "prosemirror-view"
+//import { MarkdownEditorView } from './lib/markdown-editor-view.js';
+import './dile-editor-markdown.js';
 
 export class DileEditor extends LitElement {
   static styles = [
@@ -31,21 +30,56 @@ export class DileEditor extends LitElement {
       .ProseMirror h6:first-child {
         margin-top: 10px;
       }
-
     `
   ];
 
+  static get properties() {
+    return {
+      value: { type: String },
+    };
+  }
+
+  constructor() {
+    super();
+    // document.addEventListener('dile-editor-change', (e) => {
+    //   this.value = e.detail.content;
+    // })
+  }
+
+  updated(changedProperties) {
+    if(changedProperties.has('value') && this.isValueExternalyUpdated) {
+      this.updateEditorContent(this.value);
+    }
+  }
+
   firstUpdated() {
-    let state = EditorState.create({ schema })
-    let view = new EditorView(this.shadowRoot.getElementById('editor'), {
-      state,
-    })
+    console.log(this);
+    this.editor = this.shadowRoot.getElementById('editor');
   }
 
   render() {
     return html`
-      <div id="editor"></div>
+      <dile-editor-markdown 
+        id="editor"
+        @dile-editor-change=${this.updateValue}
+      ></dile-editor-markdown>
     `;
+  }
+
+  updateValue(e) {
+    this.value = e.detail.content;
+  }
+
+  getEditorMarkdown() {
+    return this.editor.getEditorMarkdown();
+  }
+
+  updateEditorContent(value) {
+    this.editor.updateEditorContent(value);
+  }
+
+  get isValueExternalyUpdated() {
+    return this.getEditorMarkdown() != this.value
   }
 }
 customElements.define('dile-editor', DileEditor);
