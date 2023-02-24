@@ -7,7 +7,21 @@
   <title>dile editor demo</title>
 </head>
 <body>
-  <h1>dile editor demos</h1>
+  <h1>Ejemplos de uso de ProseMirror</h1>
+  <p>Aquí puedes encontrar varios ejemplos de uso del framework ProseMirror</p>
+  <h2>Componente &lt;dile-editor&gt;</h2>
+  <p>Este componente es un "work in progress".</p>
+  <dile-editor>
+# soy el slot
+
+Este componente se inicializa con el contenido del slot. Pero si tienes un atributo `value`, lo tomará con **preferencia**.
+
+- Soporta listas
+- De elementos
+- Con *Markdown*
+  </dile-editor>
+
+  <h2>Demos sencillos</h2>
   <p>
     Demos de desarrollo de editores WYSIWYG basados en ProseMirror.
   </p>
@@ -23,13 +37,6 @@
     <li><a href="./ejemplos/09-schema-markdown.html">Usar el schema de Markdown</a></li>
     <li><a href="./ejemplos/10-editor-markdown.html">Editor Markdown</a></li>
   </ul>
-
-  <dile-editor>
-# soy el slot
-
-Este componente se inicializa con el contenido del slot. Pero si tienes un atributo value, lo tomará con preferencia.
-  </dile-editor>
-
   <script src="./src/index.js" type="module"></script>
 </body>
 </html>
