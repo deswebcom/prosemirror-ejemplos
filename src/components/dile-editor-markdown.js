@@ -24,7 +24,7 @@ export class DileEditorMarkdown extends LitElement {
     const editorElement = this;
     const dispatchChange = this.dispatchChange.bind(this);
 
-    const state = this.getState('');
+    const state = this.createState('');
     const view = new EditorView(editorElement, {
       state,
       dispatchTransaction(transaction) {
@@ -48,7 +48,7 @@ export class DileEditorMarkdown extends LitElement {
     return defaultMarkdownSerializer.serialize(this.view.state.doc);
   }
 
-  getState(content) {
+  createState(content) {
     return EditorState.create({
       doc: defaultMarkdownParser.parse(content),
       plugins: [
@@ -58,7 +58,7 @@ export class DileEditorMarkdown extends LitElement {
   }
 
   updateEditorContent(content) {
-    this.view.updateState(this.getState(content));
+    this.view.updateState(this.createState(content));
   }
 
   dispatchChange(newState) {
