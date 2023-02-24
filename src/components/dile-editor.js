@@ -42,9 +42,6 @@ export class DileEditor extends LitElement {
   constructor() {
     super();
     this.value = this.innerHTML;
-    // document.addEventListener('dile-editor-change', (e) => {
-    //   this.value = e.detail.content;
-    // })
   }
 
   updated(changedProperties) {
