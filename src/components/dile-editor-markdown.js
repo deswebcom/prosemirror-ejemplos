@@ -8,6 +8,8 @@ import { EditorState, Plugin } from "prosemirror-state";
 import { EditorView } from "prosemirror-view";
 import { keymap } from "prosemirror-keymap";
 import { baseKeymap } from "prosemirror-commands";
+import { menuPlugin } from './prosemirror/menu-plugin.js';
+import './dile-editor-toolbar.js';
 
 export class DileEditorMarkdown extends LitElement {
   
@@ -53,6 +55,7 @@ export class DileEditorMarkdown extends LitElement {
       doc: defaultMarkdownParser.parse(content),
       plugins: [
         keymap(baseKeymap),
+        menuPlugin,
       ]
     })
   }
