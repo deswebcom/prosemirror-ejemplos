@@ -1,59 +1,81 @@
 import { LitElement, html, css } from 'lit';
 import { boldCommand, italicCommand, setCodeCommand } from './prosemirror/markdown-commands.js';
-import '@dile/dile-icon/dile-icon.js';
-import { homeIcon, attachmentIcon, cookieIcon } from '@dile/icons'
+import { codeIcon, formatBoldIcon, formatItalicIcon } from '@dile/icons'
+import './dile-editor-toolbar-item.js';
 
 export class DileEditorToolbar extends LitElement {
   static styles = [
     css`
       :host {
-        display: block;
-        --dile-icon-color: var(--dile-editor-toolbar-color, #303030);
+        display: flex;
+        align-items: center;
       }
-
+      dile-editor-toolbar-item {
+        margin-right: 0.4rem;
+      }
     `
   ];
 
-  constructor() {
-    super();
-    this.commands = {
-      bold: boldCommand,
-      italic: italicCommand,
-      setCode: setCodeCommand,
-    }
-  }
   static get properties() {
     return {
       editorView: { type: Object },
+      toolbarItems: { type: Array },
     };
+  }
+
+  constructor() {
+    super();
+    this.toolbarItems = [
+      {
+        command: boldCommand,
+        commandName: 'bold',
+        active: true,
+        icon: formatBoldIcon,
+      },
+      {
+        command: italicCommand,
+        commandName: 'italic',
+        active: true,
+        icon: formatItalicIcon,
+      },
+      {
+        command: setCodeCommand,
+        commandName: 'code',
+        active: true,
+        icon: codeIcon,
+      },
+    ];
   }
 
   render() {
     return html`
-      <dile-icon .icon=${homeIcon} @click=${this.doCommand('bold')}></dile-icon>  
-      <dile-icon .icon=${attachmentIcon} @click=${this.doCommand('italic') }></dile-icon>  
-      <dile-icon .icon=${cookieIcon} @click=${this.doCommand('setCode') }></dile-icon>  
+      ${this.toolbarItems.map(item => html`
+        <dile-editor-toolbar-item 
+          ?active=${item.active} 
+          commandName="${item.commandName}" 
+          .icon=${item.icon}
+          @dile-tollbar-command=${this.doCommand}
+        ></dile-editor-toolbar-item>
+      `)}
     `;
   }
 
-  doCommand(command) {
-    return () => {
-      this.commands[command](this.editorView.state, this.editorView.dispatch);
-      this.editorView.focus();
-    }
+  doCommand(e) {
+    let commandName = e.detail.name;
+    let commandElement = this.toolbarItems.find( item => item.commandName == commandName);
+    commandElement.command(this.editorView.state, this.editorView.dispatch);
+    this.editorView.focus();
   }
 
   reviewActiveElements() {
     console.log('reviewActiveElements');
-    for(let command in this.commands) {
-      let active = this.commands['bold'](this.editorView.state, null, this.editorView)
-      if(active) {
-        console.log(command, ' debería estar activo');
-      } else {
-        console.log(command, ' debería estar INACTIVO');
+    this.toolbarItems = this.toolbarItems.map( item => {
+      let active = item.command(this.editorView.state, null, this.editorView)
+      return {
+        ...item,
+        active
       }
-    }
-    //let active = command(this.editorView.state, null, this.editorView)
+    })
   }
 }
 customElements.define('dile-editor-toolbar', DileEditorToolbar);
