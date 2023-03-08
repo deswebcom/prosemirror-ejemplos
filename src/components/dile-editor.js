@@ -17,8 +17,11 @@ export class DileEditor extends LitElement {
         font-variant-ligatures: none;
         font-feature-settings: "liga" 0; /* the above doesn't seem to work in Edge */
 
-        border: 1px solid red;
+        border: 1px solid blue;
         padding: 0 10px;
+
+        max-width: 100%;
+        overflow: auto;
       }
 
       .ProseMirror p:first-child,
@@ -30,6 +33,7 @@ export class DileEditor extends LitElement {
       .ProseMirror h6:first-child {
         margin-top: 10px;
       }
+
     `
   ];
 

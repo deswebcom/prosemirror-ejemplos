@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
-import { boldCommand, italicCommand, setCodeCommand } from './prosemirror/markdown-commands.js';
-import { codeIcon, formatBoldIcon, formatItalicIcon } from '@dile/icons'
+import { boldCommand, italicCommand, setCodeCommand, setParagraphCommand } from './prosemirror/markdown-commands.js';
+import { codeIcon, formatBoldIcon, formatItalicIcon, notesIcon } from '@dile/icons'
 import './dile-editor-toolbar-item.js';
 
 export class DileEditorToolbar extends LitElement {
@@ -43,6 +43,12 @@ export class DileEditorToolbar extends LitElement {
         commandName: 'code',
         active: true,
         icon: codeIcon,
+      },
+      {
+        command: setParagraphCommand,
+        commandName: 'paragraph',
+        active: true,
+        icon: notesIcon,
       },
     ];
   }

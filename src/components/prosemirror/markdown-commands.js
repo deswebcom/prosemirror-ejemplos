@@ -8,4 +8,5 @@ import {
 
 export const boldCommand = toggleMark(schema.marks.strong);
 export const italicCommand = toggleMark(schema.marks.em);
-export const setCodeCommand = setBlockType(schema.nodes.code_block)
+export const setCodeCommand = setBlockType(schema.nodes.code_block);
+export const setParagraphCommand = setBlockType(schema.nodes.paragraph);
