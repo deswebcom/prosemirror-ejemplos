@@ -7,13 +7,15 @@ import {
   headingCommandCreator, 
   setUnorderedListCommand,
   setOrderedListCommand, 
-  liftCommand 
+  liftCommand,
+  codeMarkCommand,
 } from './prosemirror/markdown-commands.js';
 import { undo, redo } from "prosemirror-history";
 import { 
   formatBoldIcon, 
   formatItalicIcon, 
-  notesIcon, 
+  notesIcon,
+  codeIcon, 
   redoIcon, 
   undoIcon,
   formatIndentDecreaseIcon, 
@@ -47,7 +49,7 @@ export class DileEditorToolbar extends LitElement {
       }
       .blocks {
         --dile-icon-color: var(--dile-editor-toolbar-color, #303030);
-        border-left: 2px solid #999;
+        border-left: 2px solid #ccc;
         margin-left: 10px;
         padding-left: 10px;
       }
@@ -80,6 +82,12 @@ export class DileEditorToolbar extends LitElement {
         commandName: 'italic',
         active: true,
         icon: formatItalicIcon,
+      },
+      {
+        command: codeMarkCommand,
+        commandName: 'code_mark',
+        active: true,
+        icon: codeIcon,
       },
       {
         command: setUnorderedListCommand,

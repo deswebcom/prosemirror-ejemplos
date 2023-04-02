@@ -6,8 +6,9 @@ import {
 import {
   schema,
 } from "prosemirror-markdown";
-import { wrapInList } from "prosemirror-schema-list"
+import { wrapInList, liftListItem, sinkListItem } from "prosemirror-schema-list"
 
+export const codeMarkCommand = toggleMark(schema.marks.code);
 export const boldCommand = toggleMark(schema.marks.strong);
 export const italicCommand = toggleMark(schema.marks.em);
 export const setCodeCommand = setBlockType(schema.nodes.code_block);
