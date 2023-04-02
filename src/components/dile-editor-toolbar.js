@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { boldCommand, italicCommand, setCodeCommand, setParagraphCommand, headingCommandCreator } from './prosemirror/markdown-commands.js';
-import { codeIcon, formatBoldIcon, formatItalicIcon, notesIcon } from '@dile/icons'
+import { undo, redo } from "prosemirror-history";
+import { formatBoldIcon, formatItalicIcon, notesIcon, redoIcon, undoIcon } from '@dile/icons'
 import './dile-editor-toolbar-item.js';
 import '@dile/dile-select/dile-select.js';
 
@@ -43,6 +44,7 @@ export class DileEditorToolbar extends LitElement {
       editorView: { type: Object },
       toolbarItems: { type: Array },
       blockItems: { type: Array },
+      undoItems: { type: Array },
     };
   }
 
@@ -61,18 +63,33 @@ export class DileEditorToolbar extends LitElement {
         active: true,
         icon: formatItalicIcon,
       },
+      // {
+      //   command: setCodeCommand,
+      //   commandName: 'code',
+      //   active: true,
+      //   icon: codeIcon,
+      // },
+      // {
+      //   command: setParagraphCommand,
+      //   commandName: 'paragraph',
+      //   active: true,
+      //   icon: notesIcon,
+      // },
+    ];
+
+    this.undoItems = [
       {
-        command: setCodeCommand,
-        commandName: 'code',
+        command: undo,
+        commandName: 'undo',
         active: true,
-        icon: codeIcon,
+        icon: undoIcon,
       },
       {
-        command: setParagraphCommand,
-        commandName: 'paragraph',
+        command: redo,
+        commandName: 'redo',
         active: true,
-        icon: notesIcon,
-      },
+        icon: redoIcon,
+      }
     ];
 
     this.blockItems = [
@@ -107,8 +124,16 @@ export class DileEditorToolbar extends LitElement {
 
   render() {
     return html`
-      <div class="marks">
-        ${this.toolbarItems.map(item => html`
+      ${this.showItems(this.toolbarItems, 'marks')}
+      ${this.paragraphTypes}
+      ${this.showItems(this.undoItems, 'blocks')}
+    `;
+  }
+
+  showItems(items, cssClass) {
+    return html`
+      <div class="${cssClass}">
+        ${items.map(item => html`
           <dile-editor-toolbar-item 
             ?active=${item.active} 
             commandName="${item.commandName}" 
@@ -117,6 +142,11 @@ export class DileEditorToolbar extends LitElement {
           ></dile-editor-toolbar-item>
         `)}
       </div>
+    `;
+  }
+
+  get paragraphTypes() {
+    return html`
       <div class="blocks">
         <dile-icon .icon=${notesIcon}></dile-icon>
         <dile-select 
@@ -126,34 +156,43 @@ export class DileEditorToolbar extends LitElement {
           quietOnStart
         >
           <select slot="select">
-            ${this.blockItems.map( item => html`
+            ${this.blockItems.map(item => html`
               <option value="${item.commandName}">${item.commandName}</option>
             `)}
           </select>
         </dile-select>
       </div>
-    `;
+    `
   }
 
   doCommand(e) {
     let commandName = e.detail.name;
-    let commandElement = this.toolbarItems.find( item => item.commandName == commandName);
+    let commandElement;
+    commandElement = this.toolbarItems.find( item => item.commandName == commandName);
+    if(!commandElement) {
+      commandElement = this.undoItems.find(item => item.commandName == commandName);
+    }
     commandElement.command(this.editorView.state, this.editorView.dispatch);
     this.editorView.focus();
   }
 
   reviewActiveElements() {
     console.log('reviewActiveElements');
-    this.toolbarItems = this.toolbarItems.map( item => {
+    this.toolbarItems = this.computeActive(this.toolbarItems);
+    this.undoItems = this.computeActive(this.undoItems);
+    let currentBlock = this.blockItems.find(item => !item.command(this.editorView.state, null, this.editorView))
+    console.log('akkkii', currentBlock.commandName);
+    this.blockselect.quietChange(currentBlock.commandName);
+  }
+
+  computeActive(items) {
+    return items.map(item => {
       let active = item.command(this.editorView.state, null, this.editorView)
       return {
         ...item,
         active
       }
-    })
-    let currentBlock = this.blockItems.find(item => !item.command(this.editorView.state, null, this.editorView))
-    console.log('akkkii', currentBlock.commandName);
-    this.blockselect.quietChange(currentBlock.commandName);
+    });
   }
 
   blockElementChanged(e) {
