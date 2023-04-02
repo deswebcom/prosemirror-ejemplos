@@ -1,7 +1,25 @@
 import { LitElement, html, css } from 'lit';
-import { boldCommand, italicCommand, setCodeCommand, setParagraphCommand, headingCommandCreator } from './prosemirror/markdown-commands.js';
+import { 
+  boldCommand, 
+  italicCommand, 
+  setCodeCommand, 
+  setParagraphCommand, 
+  headingCommandCreator, 
+  setUnorderedListCommand,
+  setOrderedListCommand, 
+  liftCommand 
+} from './prosemirror/markdown-commands.js';
 import { undo, redo } from "prosemirror-history";
-import { formatBoldIcon, formatItalicIcon, notesIcon, redoIcon, undoIcon } from '@dile/icons'
+import { 
+  formatBoldIcon, 
+  formatItalicIcon, 
+  notesIcon, 
+  redoIcon, 
+  undoIcon,
+  formatIndentDecreaseIcon, 
+  formatListBulletedIcon, 
+  formatListNumberedIcon,
+} from '@dile/icons'
 import './dile-editor-toolbar-item.js';
 import '@dile/dile-select/dile-select.js';
 
@@ -63,18 +81,24 @@ export class DileEditorToolbar extends LitElement {
         active: true,
         icon: formatItalicIcon,
       },
-      // {
-      //   command: setCodeCommand,
-      //   commandName: 'code',
-      //   active: true,
-      //   icon: codeIcon,
-      // },
-      // {
-      //   command: setParagraphCommand,
-      //   commandName: 'paragraph',
-      //   active: true,
-      //   icon: notesIcon,
-      // },
+      {
+        command: setUnorderedListCommand,
+        commandName: 'unordered_list',
+        active: true,
+        icon: formatListBulletedIcon,
+      },
+      {
+        command: setOrderedListCommand,
+        commandName: 'ordered_list',
+        active: true,
+        icon: formatListNumberedIcon,
+      },
+      {
+        command: liftCommand,
+        commandName: 'lift',
+        active: true,
+        icon: formatIndentDecreaseIcon,
+      },
     ];
 
     this.undoItems = [

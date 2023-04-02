@@ -11,6 +11,7 @@ import { baseKeymap } from "prosemirror-commands";
 import { menuPlugin } from './prosemirror/menu-plugin.js';
 import { history } from "prosemirror-history";
 import './dile-editor-toolbar.js';
+import { buildKeymap } from "prosemirror-example-setup"
 
 export class DileEditorMarkdown extends LitElement {
   
@@ -56,6 +57,7 @@ export class DileEditorMarkdown extends LitElement {
       doc: defaultMarkdownParser.parse(content),
       plugins: [
         history(),
+        keymap(buildKeymap(schema)),
         keymap(baseKeymap),
         menuPlugin,
       ]
