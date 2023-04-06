@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import '@dile/dile-icon/dile-icon.js';
+import './dile-editor-link-dialog';
 
 export class DileEditorToolbarItem extends LitElement {
   static styles = [
@@ -18,9 +19,8 @@ export class DileEditorToolbarItem extends LitElement {
 
   static get properties() {
     return {
-      icon: { type: Object },
       active: { type: Boolean },
-      commandName: { type: String },
+      item: { type: Object },
     };
   }
 
@@ -28,19 +28,24 @@ export class DileEditorToolbarItem extends LitElement {
     return html`
       <dile-icon 
         class="${this.active ? 'active' : ''}" 
-        .icon=${this.icon} 
+        .icon=${this.item.icon} 
         @click=${this.doCommand}
-      ></dile-icon>  
+      ></dile-icon> 
+      <dile-editor-link-dialog id="linkDialog"></dile-editor-link-dialog> 
     `;
   }
 
   doCommand() {
     if(this.active) {
-      this.dispatchEvent(new CustomEvent('dile-tollbar-command', { 
-        detail: {
-          name: this.commandName
-        }
-      }));
+      if(this.item.dialog) {
+        this.shadowRoot.getElementById(this.item.dialog).open();
+      } else {
+        this.dispatchEvent(new CustomEvent('dile-toolbar-command', { 
+          detail: {
+            item: this.item
+          }
+        }));
+      }
     }
   }
 }

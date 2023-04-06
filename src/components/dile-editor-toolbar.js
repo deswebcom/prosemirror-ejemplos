@@ -1,29 +1,10 @@
 import { LitElement, html, css } from 'lit';
-import { 
-  boldCommand, 
-  italicCommand, 
-  setCodeCommand, 
-  setParagraphCommand, 
-  headingCommandCreator, 
-  setUnorderedListCommand,
-  setOrderedListCommand, 
-  liftCommand,
-  codeMarkCommand,
-} from './prosemirror/markdown-commands.js';
-import { undo, redo } from "prosemirror-history";
-import { 
-  formatBoldIcon, 
-  formatItalicIcon, 
-  notesIcon,
-  codeIcon, 
-  redoIcon, 
-  undoIcon,
-  formatIndentDecreaseIcon, 
-  formatListBulletedIcon, 
-  formatListNumberedIcon,
-} from '@dile/icons'
+import { notesIcon } from '@dile/icons'
 import './dile-editor-toolbar-item.js';
 import '@dile/dile-select/dile-select.js';
+import { toolbarItems, undoItems, blockItems } from './prosemirror/menu-items.js';
+import { markActive, linkCommand } from './prosemirror/markdown-commands.js';
+import { schema } from "prosemirror-markdown";
 
 export class DileEditorToolbar extends LitElement {
   static styles = [
@@ -70,83 +51,11 @@ export class DileEditorToolbar extends LitElement {
 
   constructor() {
     super();
-    this.toolbarItems = [
-      {
-        command: boldCommand,
-        commandName: 'bold',
-        active: true,
-        icon: formatBoldIcon,
-      },
-      {
-        command: italicCommand,
-        commandName: 'italic',
-        active: true,
-        icon: formatItalicIcon,
-      },
-      {
-        command: codeMarkCommand,
-        commandName: 'code_mark',
-        active: true,
-        icon: codeIcon,
-      },
-      {
-        command: setUnorderedListCommand,
-        commandName: 'unordered_list',
-        active: true,
-        icon: formatListBulletedIcon,
-      },
-      {
-        command: setOrderedListCommand,
-        commandName: 'ordered_list',
-        active: true,
-        icon: formatListNumberedIcon,
-      },
-      {
-        command: liftCommand,
-        commandName: 'lift',
-        active: true,
-        icon: formatIndentDecreaseIcon,
-      },
-    ];
+    this.toolbarItems = toolbarItems;
 
-    this.undoItems = [
-      {
-        command: undo,
-        commandName: 'undo',
-        active: true,
-        icon: undoIcon,
-      },
-      {
-        command: redo,
-        commandName: 'redo',
-        active: true,
-        icon: redoIcon,
-      }
-    ];
+    this.undoItems = undoItems
 
-    this.blockItems = [
-      {
-        command: setParagraphCommand,
-        commandName: 'paragraph',
-      },
-      {
-        command: headingCommandCreator(1),
-        commandName: 'h1',
-      },
-      {
-        command: headingCommandCreator(2),
-        commandName: 'h2',
-      },
-      {
-        command: headingCommandCreator(3),
-        commandName: 'h3',
-      },
-      {
-        command: setCodeCommand,
-        commandName: 'code',
-      },
-      
-    ];
+    this.blockItems = blockItems
   }
 
   firstUpdated() {
@@ -166,12 +75,17 @@ export class DileEditorToolbar extends LitElement {
     return html`
       <div class="${cssClass}">
         ${items.map(item => html`
-          <dile-editor-toolbar-item 
-            ?active=${item.active} 
-            commandName="${item.commandName}" 
-            .icon=${item.icon}
-            @dile-tollbar-command=${this.doCommand}
-          ></dile-editor-toolbar-item>
+          ${item.visible
+            ? html`
+              <dile-editor-toolbar-item 
+                ?active=${item.active} 
+                .item=${item}
+                @dile-toolbar-command=${this.doCommand}
+                @accept-link-dialog=${this.doLinkCommand}
+              ></dile-editor-toolbar-item>
+              `
+            : ''
+          }
         `)}
       </div>
     `;
@@ -198,14 +112,19 @@ export class DileEditorToolbar extends LitElement {
   }
 
   doCommand(e) {
-    let commandName = e.detail.name;
-    let commandElement;
-    commandElement = this.toolbarItems.find( item => item.commandName == commandName);
-    if(!commandElement) {
-      commandElement = this.undoItems.find(item => item.commandName == commandName);
-    }
-    commandElement.command(this.editorView.state, this.editorView.dispatch);
+    let toolbarElement = e.detail.item;
+    console.log('toolbarElement', toolbarElement);
+    toolbarElement.doCommand(this.editorView);
     this.editorView.focus();
+  }
+
+  doLinkCommand(e) {
+    console.log('hrefff', e.detail.href);
+    let attrs = { title: e.detail.title, href: e.detail.url }
+    let currentLinkCommand = linkCommand(attrs);
+    currentLinkCommand(this.editorView.state, this.editorView.dispatch);
+    // let node = schema.text(attrs.title, [schema.marks.link.create(attrs)])
+    // this.editorView.dispatch(this.editorView.state.tr.replaceSelectionWith(node, false))
   }
 
   reviewActiveElements() {
@@ -218,12 +137,10 @@ export class DileEditorToolbar extends LitElement {
   }
 
   computeActive(items) {
+    console.log('compute active', items);
     return items.map(item => {
-      let active = item.command(this.editorView.state, null, this.editorView)
-      return {
-        ...item,
-        active
-      }
+      item.checkActive(this.editorView);
+      return item;
     });
   }
 

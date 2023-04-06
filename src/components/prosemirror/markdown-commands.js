@@ -16,6 +16,16 @@ export const setParagraphCommand = setBlockType(schema.nodes.paragraph);
 export const setUnorderedListCommand = wrapInList(schema.nodes.bullet_list);
 export const setOrderedListCommand = wrapInList(schema.nodes.ordered_list);
 export const liftCommand = lift;
+export const linkCommand = (attrs) => toggleMark(schema.marks.link, attrs);
+
+export function markActive(state, type) {
+  let { from, $from, to, empty } = state.selection
+  if (empty) {
+    return !!type.isInSet(state.storedMarks || $from.marks())
+  } else {
+    return state.doc.rangeHasMark(from, to, type)
+  } 
+}
 
 export function headingCommandCreator(level) {
   return setBlockType(schema.nodes.heading, { level });
