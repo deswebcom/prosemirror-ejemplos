@@ -38,8 +38,6 @@ export class DileEditorMarkdown extends LitElement {
       }
     })
     this.view = view;
-    //this.updateEditorContent(content);
-    console.log('fin constructor editor markdown');
   }
 
   render() {

@@ -49,7 +49,6 @@ export class DileEditorImageDialog extends LitElement {
   open(view) {
     if (view.state.selection instanceof NodeSelection && view.state.selection.node.type == schema.nodes.image) {
       let attrs = view.state.selection.node.attrs
-      console.log('fiiiii', attrs);
       this.srcInput.value = attrs.src;
       this.altInput.value = attrs.alt;
     }

@@ -56,7 +56,6 @@ export class DileEditor extends LitElement {
   }
 
   firstUpdated() {
-    console.log(this);
     this.editor = this.shadowRoot.getElementById('editor');
   }
 

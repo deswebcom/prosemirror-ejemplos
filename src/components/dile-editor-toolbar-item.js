@@ -43,9 +43,6 @@ export class DileEditorToolbarItem extends LitElement {
   }
 
   doCommand() {
-    console.log('doCommand en editor toolbar item');
-    
-    //state.selection instanceof NodeSelection
     if(this.active) {
       if(this.item.dialog) {
         this.shadowRoot.getElementById(this.item.dialog).open(this.editorView);

@@ -114,15 +114,12 @@ export class DileEditorToolbar extends LitElement {
   }
 
   doCommand(e) {
-
     let toolbarElement = e.detail.item;
-    console.log('toolbarElement', toolbarElement);
     toolbarElement.doCommand(this.editorView);
     this.editorView.focus();
   }
 
   doLinkCommand(e) {
-    console.log('hrefff', e.detail.href);
     let attrs = { title: e.detail.title, href: e.detail.url }
     let currentLinkCommand = linkCommand(attrs);
     currentLinkCommand(this.editorView.state, this.editorView.dispatch);
@@ -131,33 +128,20 @@ export class DileEditorToolbar extends LitElement {
   }
 
   doImageCommand(e) {
-    console.log('doimagecommand', e.detail);
     let nodeType = schema.nodes.image
     this.editorView.dispatch(
       this.editorView.state.tr.replaceSelectionWith(nodeType.createAndFill(e.detail)))
     this.editorView.focus()
-
-    // 
-    // let url = e.detail.url;
-    // let id = {}
-    // let pos = findPlaceholder(this.editorView.state, id)
-    // this.editorView.dispatch(this.editorView.state.tr
-    //   .replaceWith(pos, pos, schema.nodes.image.create({ src: url }))
-    // )
-      //.setMeta(placeholderPlugin, { remove: { id } }))
   }
 
   reviewActiveElements() {
-    //console.log('reviewActiveElements');
     this.toolbarItems = this.computeActive(this.toolbarItems);
     this.undoItems = this.computeActive(this.undoItems);
     let currentBlock = this.blockItems.find(item => !item.command(this.editorView.state, null, this.editorView))
-    console.log('akkkii', currentBlock.commandName);
     this.blockselect.quietChange(currentBlock.commandName);
   }
 
   computeActive(items) {
-    //console.log('compute active', items);
     return items.map(item => {
       item.checkActive(this.editorView);
       return item;
@@ -165,7 +149,6 @@ export class DileEditorToolbar extends LitElement {
   }
 
   blockElementChanged(e) {
-    console.log('blockElementChanged', e.detail.name, e.detail.value);
     let commandName = e.detail.value;
     let commandElement = this.blockItems.find(item => item.commandName == commandName);
     commandElement.command(this.editorView.state, this.editorView.dispatch);
