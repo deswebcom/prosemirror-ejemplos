@@ -37,6 +37,17 @@ export class ToolbarLink extends ToolbarItem {
   }
 }
 
+export class ToolbarImage extends ToolbarItem {
+  constructor(config) {
+    super(config);
+    this.dialog = 'imageDialog';
+  }
+  checkActive(editorView) {
+    //this.visible = !markActive(editorView.state, schema.marks.link);
+    this.active = true
+  }
+}
+
 export class ToolbarRemoveLink extends ToolbarItem {
   constructor(config) {
     super(config);

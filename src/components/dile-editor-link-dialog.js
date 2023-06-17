@@ -28,7 +28,7 @@ export class DileEditorLinkDialog extends LitElement {
   render() {
     return html`
       <dile-menu-overlay>
-        <span id="trigger" slot="trigger">Click to open</span>
+        <span id="trigger" slot="trigger"></span>
         <div slot="content">
           <section class="grid">
             <div>URL:</div>

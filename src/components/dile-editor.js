@@ -7,6 +7,7 @@ export class DileEditor extends LitElement {
     css`
       :host {
         display: block;
+        
       }
       .ProseMirror {
         position: relative;

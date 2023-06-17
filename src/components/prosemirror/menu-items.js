@@ -10,6 +10,7 @@ import {
   formatListNumberedIcon,
   insertLinkIcon,
   linkOffIcon,
+  imageIcon,
 } from '@dile/icons';
 import {
   boldCommand,
@@ -23,7 +24,7 @@ import {
   codeMarkCommand,
   linkCommand,
 } from './markdown-commands.js';
-import { ToolbarItem, ToolbarLink, ToolbarRemoveLink } from "./toolbar-item.js";
+import { ToolbarItem, ToolbarLink, ToolbarRemoveLink, ToolbarImage } from "./toolbar-item.js";
 
 export const toolbarItems = [
   new ToolbarItem({
@@ -49,6 +50,11 @@ export const toolbarItems = [
   new ToolbarRemoveLink({
     commandName: 'removeLink',
     icon: linkOffIcon,
+  }),
+  new ToolbarImage({
+    command: linkCommand,
+    commandName: 'image',
+    icon: imageIcon,
   }),
   new ToolbarItem({
     command: setUnorderedListCommand,

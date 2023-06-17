@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import '@dile/dile-icon/dile-icon.js';
 import './dile-editor-link-dialog';
+import './dile-editor-image-dialog';
 
 export class DileEditorToolbarItem extends LitElement {
   static styles = [
@@ -10,6 +11,10 @@ export class DileEditorToolbarItem extends LitElement {
         align-items: center;
         --dile-icon-color: #aaa;
         cursor: pointer;
+        --dile-menu-overlay-padding: 0.5rem;
+        --dile-button-padding-y: 0.15rem;
+        --dile-button-font-size: 0.8rem;
+        --dile-button-border-width: 2px;
       }
       .active {
         --dile-icon-color: var(--dile-editor-toolbar-color, #303030);
@@ -21,6 +26,7 @@ export class DileEditorToolbarItem extends LitElement {
     return {
       active: { type: Boolean },
       item: { type: Object },
+      editorView: { type: Object },
     };
   }
 
@@ -32,13 +38,17 @@ export class DileEditorToolbarItem extends LitElement {
         @click=${this.doCommand}
       ></dile-icon> 
       <dile-editor-link-dialog id="linkDialog"></dile-editor-link-dialog> 
+      <dile-editor-image-dialog id="imageDialog"></dile-editor-image-dialog> 
     `;
   }
 
   doCommand() {
+    console.log('doCommand en editor toolbar item');
+    
+    //state.selection instanceof NodeSelection
     if(this.active) {
       if(this.item.dialog) {
-        this.shadowRoot.getElementById(this.item.dialog).open();
+        this.shadowRoot.getElementById(this.item.dialog).open(this.editorView);
       } else {
         this.dispatchEvent(new CustomEvent('dile-toolbar-command', { 
           detail: {

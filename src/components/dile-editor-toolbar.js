@@ -82,6 +82,8 @@ export class DileEditorToolbar extends LitElement {
                 .item=${item}
                 @dile-toolbar-command=${this.doCommand}
                 @accept-link-dialog=${this.doLinkCommand}
+                @accept-image-dialog=${this.doImageCommand}
+                .editorView=${this.editorView}
               ></dile-editor-toolbar-item>
               `
             : ''
@@ -112,6 +114,7 @@ export class DileEditorToolbar extends LitElement {
   }
 
   doCommand(e) {
+
     let toolbarElement = e.detail.item;
     console.log('toolbarElement', toolbarElement);
     toolbarElement.doCommand(this.editorView);
@@ -127,8 +130,25 @@ export class DileEditorToolbar extends LitElement {
     // this.editorView.dispatch(this.editorView.state.tr.replaceSelectionWith(node, false))
   }
 
+  doImageCommand(e) {
+    console.log('doimagecommand', e.detail);
+    let nodeType = schema.nodes.image
+    this.editorView.dispatch(
+      this.editorView.state.tr.replaceSelectionWith(nodeType.createAndFill(e.detail)))
+    this.editorView.focus()
+
+    // 
+    // let url = e.detail.url;
+    // let id = {}
+    // let pos = findPlaceholder(this.editorView.state, id)
+    // this.editorView.dispatch(this.editorView.state.tr
+    //   .replaceWith(pos, pos, schema.nodes.image.create({ src: url }))
+    // )
+      //.setMeta(placeholderPlugin, { remove: { id } }))
+  }
+
   reviewActiveElements() {
-    console.log('reviewActiveElements');
+    //console.log('reviewActiveElements');
     this.toolbarItems = this.computeActive(this.toolbarItems);
     this.undoItems = this.computeActive(this.undoItems);
     let currentBlock = this.blockItems.find(item => !item.command(this.editorView.state, null, this.editorView))
@@ -137,7 +157,7 @@ export class DileEditorToolbar extends LitElement {
   }
 
   computeActive(items) {
-    console.log('compute active', items);
+    //console.log('compute active', items);
     return items.map(item => {
       item.checkActive(this.editorView);
       return item;
