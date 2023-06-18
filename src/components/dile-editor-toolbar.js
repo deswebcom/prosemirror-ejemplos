@@ -12,7 +12,7 @@ export class DileEditorToolbar extends LitElement {
       :host {
         display: flex;
         align-items: center;
-        border: 1px solid red;
+        border-bottom: 1px solid #ddd;
         padding: 4px;
       }
       dile-editor-toolbar-item {

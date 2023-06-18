@@ -46,7 +46,7 @@ export class DileEditorMarkdown extends LitElement {
     `;
   }
 
-  getEditorMarkdown() {
+  get editorMarkdown() {
     return defaultMarkdownSerializer.serialize(this.view.state.doc);
   }
 
@@ -72,6 +72,10 @@ export class DileEditorMarkdown extends LitElement {
         content: defaultMarkdownSerializer.serialize(newState.doc)
       }
     }));
+  }
+
+  get markdownCode() {
+    return defaultMarkdownSerializer.serialize(this.view.state.doc);
   }
 }
 customElements.define('dile-editor-markdown', DileEditorMarkdown);
