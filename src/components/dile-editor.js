@@ -26,7 +26,7 @@ export class DileEditor extends LitElement {
         
       }
      :host(:focus-within) {
-      border: 2px solid #106eda;
+      border: 2px solid var(--dile-editor-focus-color, #6af);
      }
       
       nav {
@@ -38,8 +38,6 @@ export class DileEditor extends LitElement {
         border-top-right-radius: 0.5rem;
         border-top-left-radius: 0.5rem;
 
-      }
-      dile-pages {
       }
 
       .ProseMirror {
