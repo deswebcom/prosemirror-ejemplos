@@ -104,10 +104,6 @@ export const blockItems = [
     commandName: 'h3',
   },
   {
-    command: headingCommandCreator(4),
-    commandName: 'h4',
-  },
-  {
     command: setCodeCommand,
     commandName: 'code',
   },

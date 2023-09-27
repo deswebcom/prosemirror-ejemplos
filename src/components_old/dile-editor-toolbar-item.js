@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import '@dile/dile-icon/dile-icon.js';
-import './dile-editor-link-dialog.js';
-import './dile-editor-image-dialog.js';
+import './dile-editor-link-dialog';
+import './dile-editor-image-dialog';
 
 export class DileEditorToolbarItem extends LitElement {
   static styles = [

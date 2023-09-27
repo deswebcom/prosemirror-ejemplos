@@ -1,14 +1,16 @@
 import { LitElement, html, css } from 'lit';
-import { NodeSelection } from "prosemirror-state"
-import { schema } from "prosemirror-markdown";
 import '@dile/dile-menu-overlay/dile-menu-overlay.js';
 import '@dile/dile-button/dile-button.js';
 
-export class DileEditorImageDialog extends LitElement {
+export class DileEditorLinkDialog extends LitElement {
   static styles = [
     css`
       :host {
         display: block;
+        --dile-menu-overlay-padding: 0.5rem;
+        --dile-button-padding-y: 0.15rem;
+        --dile-button-font-size: 0.8rem;
+        --dile-button-border-width: 2px;
       }
       #trigger {
         display: none;
@@ -26,34 +28,24 @@ export class DileEditorImageDialog extends LitElement {
   render() {
     return html`
       <dile-menu-overlay>
-        <span id="trigger" slot="trigger">Click to open</span>
+        <span id="trigger" slot="trigger"></span>
         <div slot="content">
           <section class="grid">
             <div>URL:</div>
-            <div><input type="text" id="src" value="https://placekitten.com/540/360"></div>
-            <div>Alt:</div>
-            <div><input type="text" id="alt" value="Un gatito"></div>
+            <div><input type="text" id="url"></div>
+            <div>Title:</div>
+            <div><input type="text" id="title"></div>
           </section>
           <dile-button @click=${this.accept}>Accept</dile-button> <dile-button @click=${this.close}>Cancel</dile-button> 
         </div>
       </dile-menu-overlay>
     `;
   }
+
   get menu() {
     return this.shadowRoot.querySelector('dile-menu-overlay');
   }
-  get srcInput() {
-    return this.shadowRoot.getElementById('src');
-  }
-  get altInput() {
-    return this.shadowRoot.getElementById('alt')
-  }
-  open(view) {
-    if (view.state.selection instanceof NodeSelection && view.state.selection.node.type == schema.nodes.image) {
-      let attrs = view.state.selection.node.attrs
-      this.srcInput.value = attrs.src;
-      this.altInput.value = attrs.alt;
-    }
+  open() {
     this.menu.open();
   }
   close() {
@@ -61,14 +53,14 @@ export class DileEditorImageDialog extends LitElement {
   }
   accept() {
     this.close();
-    this.dispatchEvent(new CustomEvent('accept-image-dialog', {
+    this.dispatchEvent(new CustomEvent('accept-link-dialog', {
       bubbles: true,
       composed: true,
       detail: {
-        src: this.srcInput.value,
-        alt: this.altInput.value,
+        url: this.shadowRoot.getElementById('url').value,
+        title: this.shadowRoot.getElementById('title').value,
       }
     }));
   }
 }
-customElements.define('dile-editor-image-dialog', DileEditorImageDialog);
+customElements.define('dile-editor-link-dialog', DileEditorLinkDialog);

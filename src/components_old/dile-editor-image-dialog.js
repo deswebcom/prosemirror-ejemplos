@@ -1,8 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { NodeSelection } from "prosemirror-state"
 import { schema } from "prosemirror-markdown";
-import '@dile/dile-menu-overlay/dile-menu-overlay.js';
-import '@dile/dile-button/dile-button.js';
 
 export class DileEditorImageDialog extends LitElement {
   static styles = [

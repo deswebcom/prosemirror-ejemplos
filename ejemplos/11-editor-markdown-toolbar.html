@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editor de Markdown</title>
+  <link rel="stylesheet" href="./css/editor-toolbar.css">
+</head>
+
+<body>
+  <h1>Editor de Markdown</h1>
+
+<div id="editor"></div>
+<div id="content" style="display: none;">
+# Bienvenidos a Markdown en ProseMirror
+
+Este es el **contenido de este documento**, que estoy escribiendo en Markdown.
+
+Si no sabes markdown puedes consultar en este enlace a la [categoría Markdown de
+DesarrolloWeb](https://desarrolloweb.com/home/markdown).
+
+- Markdown es *sencillo*
+- Ligero
+- Muy útil
+</div>
+<button id="obtenerCodigo">Obtener Markdown</button>
+  <hr>
+  <a href="../index.html">Volver</a>
+
+  <script type="module">
+    import { EditorView } from "prosemirror-view"
+    import { EditorState } from "prosemirror-state"
+    import {
+      schema, defaultMarkdownParser,
+      defaultMarkdownSerializer
+    } from "prosemirror-markdown"
+    //import { exampleSetup } from "prosemirror-example-setup"ç
+    import { menuPlugin } from '../src/components/prosemirror/menu-plugin.js';
+    import { keymap } from "prosemirror-keymap";
+    import { baseKeymap } from "prosemirror-commands";
+    import { history } from "prosemirror-history";
+    import { buildKeymap } from "prosemirror-example-setup";
+
+
+    let content = document.getElementById('content');
+    let state = EditorState.create({
+      doc: defaultMarkdownParser.parse(''),
+      //doc: defaultMarkdownParser.parse(content.innerHTML),
+      plugins: [
+        history(),
+        keymap(buildKeymap(schema)),
+        keymap(baseKeymap),
+        menuPlugin(),
+      ]
+    })
+    let view = new EditorView(document.getElementById('editor'), {
+      state,
+    });
+
+    document.getElementById('obtenerCodigo').addEventListener('click', function() {
+      let code = defaultMarkdownSerializer.serialize(view.state.doc);
+      console.log(code);
+    })
+  </script>
+</body>
+
+</html>

@@ -1,1 +1,1 @@
-import './components/dile-editor.js';
+import './dile-editor.js';

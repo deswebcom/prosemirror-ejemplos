@@ -8,10 +8,10 @@ import { EditorState, Plugin } from "prosemirror-state";
 import { EditorView } from "prosemirror-view";
 import { keymap } from "prosemirror-keymap";
 import { baseKeymap } from "prosemirror-commands";
-import { history } from "prosemirror-history";
-import { buildKeymap, exampleSetup } from "prosemirror-example-setup";
-import './dile-editor-toolbar.js';
 import { menuPlugin } from './prosemirror/menu-plugin.js';
+import { history } from "prosemirror-history";
+import './dile-editor-toolbar.js';
+import { buildKeymap } from "prosemirror-example-setup"
 
 export class DileEditorMarkdown extends LitElement {
   
@@ -40,8 +40,10 @@ export class DileEditorMarkdown extends LitElement {
     this.view = view;
   }
 
-  createRenderRoot() {
-    return this;
+  render() {
+    return html`
+      <slot></slot>
+    `;
   }
 
   get editorMarkdown() {
@@ -52,14 +54,10 @@ export class DileEditorMarkdown extends LitElement {
     return EditorState.create({
       doc: defaultMarkdownParser.parse(content),
       plugins: [
-        // ...exampleSetup({
-        //   schema,
-        //   //menuBar: false,
-        // }),
         history(),
         keymap(buildKeymap(schema)),
         keymap(baseKeymap),
-        menuPlugin(),
+        menuPlugin,
       ]
     })
   }

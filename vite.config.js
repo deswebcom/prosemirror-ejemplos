@@ -19,6 +19,7 @@ export default defineConfig({
         schemaList: resolve(__dirname, 'ejemplos', '08-schema-list.html'),
         schemaMarkdown: resolve(__dirname, 'ejemplos', '09-schema-markdown.html'),
         editorMarkdown: resolve(__dirname, 'ejemplos', '10-editor-markdown.html'), 
+        editorMarkdownToolbar: resolve(__dirname, 'ejemplos', '11-editor-markdown-toolbar.html'), 
       },
     },
   },

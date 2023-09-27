@@ -3,7 +3,7 @@ import { notesIcon } from '@dile/icons'
 import './dile-editor-toolbar-item.js';
 import '@dile/dile-select/dile-select.js';
 import { toolbarItems, undoItems, blockItems } from './prosemirror/menu-items.js';
-import { linkCommand } from './prosemirror/markdown-commands.js';
+import { markActive, linkCommand } from './prosemirror/markdown-commands.js';
 import { schema } from "prosemirror-markdown";
 
 export class DileEditorToolbar extends LitElement {
@@ -11,7 +11,6 @@ export class DileEditorToolbar extends LitElement {
     css`
       :host {
         display: flex;
-        flex-wrap: wrap;
         align-items: center;
         border-bottom: 1px solid #ddd;
         padding: 4px;
@@ -139,7 +138,7 @@ export class DileEditorToolbar extends LitElement {
     this.toolbarItems = this.computeActive(this.toolbarItems);
     this.undoItems = this.computeActive(this.undoItems);
     let currentBlock = this.blockItems.find(item => !item.command(this.editorView.state, null, this.editorView))
-    this.blockselect?.quietChange(currentBlock.commandName);
+    this.blockselect.quietChange(currentBlock.commandName);
   }
 
   computeActive(items) {
